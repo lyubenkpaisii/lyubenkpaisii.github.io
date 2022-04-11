@@ -11,7 +11,7 @@ var isSupported = (function() {
 })();
 
 function isReady() {
-  return !running && isWorkerLoaded && sampleVideoData;
+  return !running && isWorkerLoaded;
 }
 
 function startRunning() {
