@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Video writer test</title>
     <script type="text/javascript" src="webm-writer.js"></script>
-    <script type="text/javascript" src="FileSaver.js"></script>
     <script type="text/javascript" src="test.js"></script>
     <style type="text/css">
         .video-block {
@@ -29,11 +28,12 @@
     </div>
     <div class="video-block">
         <h2>Rendered WebM video</h2>
-        <video controls loop muted autoplay width="500" height="500"></video>
+        <video controls loop muted autoplay width="500" height="500" id='video'></video>
     </div>
 	<button onclick="document.getElementById('file-input').click();">Open</button>
 	<input id="file-input" type="file" name="file" onchange="showKonataPictures(this)" style="display: none;" multiple/>
-	<button onclick="downloadWebm()">Download</button><br/>
+	<button onclick="downloadWebm()">Make Video</button>
+	<button onclick="resetApp()">Clear</button><br/>
 	<div class="slidecontainer">
 		<input type="range" min="1" max="60" value="30" class="slider" id="slider" onchange="changeFramerate()">
 		<label for="slider" id="slider-label">30</label>

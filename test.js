@@ -64,13 +64,22 @@ function showKonataPictures(path) {
 		}
 	}
 }
+function resetApp() {
+	document.getElementById('canvas').getContext("2d").clearRect(0,0,500,500);
+	document.getElementById('image-loaded').innerText = '';
+	videoWriter = new WebMWriter({frameRate: framerate,fileWriter: null});
+	let video = document.getElementById('video');
+	video.pause();
+	video.removeAttribute('src');
+	video.load();
+	document.getElementById('slider').disabled = false;
+}
 function downloadWebm() {
 	let video = document.getElementsByTagName("video")[0];
 	videoWriter.complete()
 		.then(function(webMBlob) {
 			video.src = URL.createObjectURL(webMBlob);
-			console.log(webMBlob);	
-		saveAs(webMBlob, 'video.webm');
+			//console.log(webMBlob);
 	});
 }
 
