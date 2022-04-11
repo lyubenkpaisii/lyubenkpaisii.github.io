@@ -32,7 +32,7 @@ function showKonataPictures(path) {
 	toggleSlider();
 	videoWriter = new WebMWriter({frameRate: framerate,fileWriter: null});
 	console.log('Current framerate: ',framerate);
-	
+	let image_count = path.target.files.length;
 	for(let i = 0;i<path.target.files.length;i++){
 		console.log(path.target.files[i]);
 		let file = path.target.files[i];
@@ -49,17 +49,20 @@ function showKonataPictures(path) {
 			let canvas = document.getElementById("canvas");
 			let context = canvas.getContext("2d");
 			
-			console.log('File content: ',blobUrl);
+			//console.log('File content: ',blobUrl);
 			let img = new Image;
 			img.src = blobUrl;
 			img.onload = () => {
 				context.clearRect(0,0,500,500);
 				context.drawImage(img,0,0,500,500);
 				videoWriter.addFrame(canvas);
+				image_count -= 1;
+				if(image_count == 0){
+					document.getElementById('image-loaded').innerText = "Loaded every image";
+				}
 			};
-
 		}
-	}	
+	}
 }
 function downloadWebm() {
 	let video = document.getElementsByTagName("video")[0];
