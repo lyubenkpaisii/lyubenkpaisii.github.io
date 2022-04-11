@@ -39,21 +39,6 @@ function stopRunning() {
   oReq.send(null);
 }*/
 
-function retrieveSampleVideo() {
-  var oReq = new XMLHttpRequest();
-  oReq.open("GET", "bigbuckbunny.webm", true);
-  oReq.responseType = "arraybuffer";
-
-  oReq.onload = function (oEvent) {
-    var arrayBuffer = oReq.response;
-    if (arrayBuffer) {
-      sampleVideoData = new Uint8Array(arrayBuffer);
-    }
-  };
-
-  oReq.send(null);
-}
-
 function parseArguments(text) {
   text = text.replace(/\s+/g, ' ');
   var args = [];
@@ -216,6 +201,18 @@ function downloadWebm() {
 		.then(function(webMBlob) {
 			video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
+			var oReq = new XMLHttpRequest();
+			oReq.open("GET", video.src, true);
+			oReq.responseType = "arraybuffer";
+
+			oReq.onload = function (oEvent) {
+				var arrayBuffer = oReq.response;
+				if (arrayBuffer) {
+				  sampleVideoData = new Uint8Array(arrayBuffer);
+				}
+			};
+
+			oReq.send(null);
 	});
 }
 
