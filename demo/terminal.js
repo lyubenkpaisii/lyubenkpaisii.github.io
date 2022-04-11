@@ -1,6 +1,5 @@
 
 var worker;
-var sampleImageData;
 var sampleVideoData;
 var outputElement;
 var filesElement;
@@ -11,7 +10,7 @@ var isSupported = (function() {
 })();
 
 function isReady() {
-  return !running && isWorkerLoaded && sampleImageData && sampleVideoData;
+  return !running && isWorkerLoaded && sampleVideoData;
 }
 
 function startRunning() {
@@ -25,7 +24,7 @@ function stopRunning() {
   running = false;
 }
 
-function retrieveSampleImage() {
+/*function retrieveSampleImage() {
   var oReq = new XMLHttpRequest();
   oReq.open("GET", "bigbuckbunny.jpg", true);
   oReq.responseType = "arraybuffer";
@@ -38,7 +37,7 @@ function retrieveSampleImage() {
   };
 
   oReq.send(null);
-}
+}*/
 
 function retrieveSampleVideo() {
   var oReq = new XMLHttpRequest();
@@ -80,10 +79,6 @@ function runCommand(text) {
       type: "command",
       arguments: args,
       files: [
-        {
-          "name": "input.jpeg",
-          "data": sampleImageData
-        },
         {
           "name": "input.webm",
           "data": sampleVideoData
@@ -144,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   initWorker();
   retrieveSampleVideo();
-  retrieveSampleImage();
 
   var inputElement = document.querySelector("#input");
   outputElement = document.querySelector("#output");
