@@ -175,6 +175,7 @@ function showKonataPictures(path) {
 		}
 	}
 }
+var debugWebmBlob;
 function resetApp() {
 	document.getElementById('canvas').getContext("2d").clearRect(0,0,500,500);
 	document.getElementById('image-loaded').innerText = '';
@@ -189,6 +190,7 @@ function downloadWebm() {
 	let video = document.getElementsByTagName("video")[0];
 	videoWriter.complete()
 		.then(function(webMBlob) {
+			debugWebmBlob = webMBlob;
 			video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
 			console.log(webMBlob);
@@ -206,22 +208,11 @@ function downloadWebm() {
 				else {
 					console.log("Array buffer empty on fortnite video request");
 					console.warn(oReq);
+					sampleVideoData = new Uint8Array(webMBlob.arrayBuffer());
 				}
 			};
 			oReq.send(null);
 			
-			oReq = new XMLHttpRequest();
-			oReq.open("GET", "Theperfectgirl.mp3", true);
-			oReq.responseType = "arraybuffer";
-
-			oReq.onload = function (oEvent) {
-				var arrayBuffer = oReq.response;
-				if (arrayBuffer) {
-				  perfectGirlData = new Uint8Array(arrayBuffer);
-				}
-			};
-
-			oReq.send(null);
 			initTerminal();
 	});
 }
@@ -254,4 +245,17 @@ function initTerminal() {
 document.addEventListener("DOMContentLoaded", function() {
 	var input = document.getElementById('file-input');
 	input.onchange = showKonataPictures;
+	
+	oReq = new XMLHttpRequest();
+	oReq.open("GET", "Theperfectgirl.mp3", true);
+	oReq.responseType = "arraybuffer";
+
+	oReq.onload = function (oEvent) {
+		var arrayBuffer = oReq.response;
+		if (arrayBuffer) {
+		  perfectGirlData = new Uint8Array(arrayBuffer);
+		}
+	};
+
+	oReq.send(null);
 });
