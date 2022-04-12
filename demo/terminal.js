@@ -216,7 +216,7 @@ function downloadWebm() {
 				  sampleVideoData = new Uint8Array(arrayBuffer);
 				}
 			};
-			var oReq = new XMLHttpRequest();
+			oReq = new XMLHttpRequest();
 			oReq.open("GET", "Theperfectgirl.mp3", true);
 			oReq.responseType = "arraybuffer";
 
@@ -238,27 +238,27 @@ document.addEventListener("DOMContentLoaded", function() {
 	input.onchange = showKonataPictures;
 
   initWorker();
-  retrieveSampleVideo();
+  
+	var inputElement = document.querySelector("#input");
+	outputElement = document.querySelector("#output");
+	filesElement = document.querySelector("#files");
 
-  var inputElement = document.querySelector("#input");
-  outputElement = document.querySelector("#output");
-  filesElement = document.querySelector("#files");
+	inputElement.addEventListener("keydown", function(e) {
+	if (e.keyCode === 13) {
+		runCommand(inputElement.value);
+	}
+	}, false);
+	document.querySelector("#run").addEventListener("click", function() {
+	runCommand(inputElement.value);
+	});
 
-  inputElement.addEventListener("keydown", function(e) {
-    if (e.keyCode === 13) {
-      runCommand(inputElement.value);
-    }
-  }, false);
-  document.querySelector("#run").addEventListener("click", function() {
-    runCommand(inputElement.value);
-  });
-
-  [].forEach.call(document.querySelectorAll(".sample"), function(link) {
-    link.addEventListener("click", function(e) {
-      inputElement.value = this.getAttribute("data-command");
-      runCommand(inputElement.value);
-      e.preventDefault();
-    });
-  });
+	[].forEach.call(document.querySelectorAll(".sample"), function(link) {
+	link.addEventListener("click", function(e) {
+		inputElement.value = this.getAttribute("data-command");
+		runCommand(inputElement.value);
+		e.preventDefault();
+		});
+	});
+	
 
 });
