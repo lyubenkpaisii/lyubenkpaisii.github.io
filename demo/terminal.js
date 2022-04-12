@@ -70,7 +70,7 @@ function runCommand(text) {
           "data": sampleVideoData
         },
 		{
-			"name": "perfect_girl.mp3",
+			"name": "perfectgirl.mp3",
 			"data": perfectGirlData
 		}
       ]
