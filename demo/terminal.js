@@ -2,8 +2,6 @@
 var worker;
 var sampleVideoData;
 var sampleAudioData;
-var outputElement;
-var filesElement;
 var running = false;
 var isWorkerLoaded = false;
 var isSupported = (function() {
@@ -15,8 +13,6 @@ function isReady() {
 }
 
 function startRunning() {
-  outputElement.className = "";
-  filesElement.innerHTML = "";
   running = true;
 }
 function stopRunning() {
@@ -36,29 +32,6 @@ function parseArguments(text) {
     }
   });
   return args;
-}
-
-
-function runCommand(text) {
-  if (isReady()) {
-    startRunning();
-    var args = parseArguments(text);
-    console.log(args);
-    worker.postMessage({
-      type: "command",
-      arguments: args,
-      files: [
-        {
-          "name": "video.webm",
-          "data": sampleVideoData
-        },
-		{
-			"name": "audio.mp3",
-			"data": sampleAudioData
-		}
-      ]
-    });
-  }
 }
 
 function getDownloadLink(fileData, fileName) {
@@ -81,32 +54,7 @@ function getDownloadLink(fileData, fileName) {
   }
 }
 
-function initWorker() {
-	worker = new Worker("worker-asm.js");
-	worker.onmessage = function (event) {
-		var message = event.data;
-		if (message.type == "ready") {
-			isWorkerLoaded = true;
-			worker.postMessage({
-				type: "command",
-				arguments: ["-help"]
-			});
-			} else if (message.type == "stdout") {
-				outputElement.textContent += message.data + "\n";
-			} else if (message.type == "start") {
-				outputElement.textContent = "Worker has received command\n";
-			} else if (message.type == "done") {
-				stopRunning();
-				var buffers = message.data;
-				if (buffers.length) {
-					outputElement.className = "closed";
-				}
-				buffers.forEach(function(file) {
-					filesElement.appendChild(getDownloadLink(file.data, file.name));
-				});
-		}
-	};
-}
+
 function b64toBlob(b64Data, contentType='', sliceSize=512) {
 	const byteCharacters = atob(b64Data);
 	const byteArrays = [];
@@ -183,16 +131,16 @@ function resetApp() {
 	video.load();
 	document.getElementById('slider').disabled = false;
 }
-function downloadWebm() {
+function processWebm() {
 	let video = document.getElementById('video-fortnite');
 	videoWriter.complete()
 		.then(function(webMBlob) {
-			video.src = URL.createObjectURL(webMBlob);
+			//video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
-			console.log(webMBlob);
+			//console.log(webMBlob);
 			
 			var oReq = new XMLHttpRequest();
-			oReq.open("GET", video.src, true);
+			oReq.open("GET",  URL.createObjectURL(webMBlob), true);
 			oReq.responseType = "arraybuffer";
 
 			oReq.onload = function (oEvent) {
@@ -212,30 +160,51 @@ function downloadWebm() {
 			initTerminal();
 	});
 }
+function initWorker() {
+	worker = new Worker("worker-asm.js");
+	worker.onmessage = function (event) {
+		var message = event.data;
+		if (message.type == "ready") {
+			isWorkerLoaded = true;
+			worker.postMessage({
+				type: "command",
+				arguments: parseArguments("-i video.webm -i audio.mp3 -map 0:v -map 1:a -c:v copy -shortest -strict -2 output.webm"),
+				files: [
+					{
+						"name": "video.webm",
+						"data": sampleVideoData
+					},
+					{
+						"name": "audio.mp3",
+						"data": sampleAudioData
+					}
+				]
+			});
+		}
+		else if (message.type == "stdout") {			
+			console.log("Worker: ", message.data);
+
+		} else if (message.type == "start") {	
+			console.log("Worker: ","Worker has received command");
+
+		} else if (message.type == "done") {
+			stopRunning();
+			var buffers = message.data;
+			if (buffers.length) {
+				console.log("Worker: ","closed");
+			}
+			buffers.forEach(function(file) {
+				console.log(file);
+				var blob = new Blob([file.data],{type: "video/mp4"});
+				document.getElementById('video-fortnite').src = window.URL.createObjectURL(blob);
+			});
+		}
+	};
+}
 function initTerminal() {
 	initWorker();
-  
-	var inputElement = document.querySelector("#input");
-	outputElement = document.querySelector("#output");
-	filesElement = document.querySelector("#files");
-
-	inputElement.addEventListener("keydown", function(e) {
-	if (e.keyCode === 13) {
-		runCommand(inputElement.value);
-	}
-	}, false);
-	document.querySelector("#run").addEventListener("click", function() {
-		runCommand(inputElement.value);
-	});
-
-	[].forEach.call(document.querySelectorAll(".sample"), function(link) {
-	link.addEventListener("click", function(e) {
-		inputElement.value = this.getAttribute("data-command");
-		runCommand(inputElement.value);
-		e.preventDefault();
-		});
-	});
 }
+
 function audioLoad() {
 	oReq = new XMLHttpRequest();
 	oReq.open("GET", "audio.mp3", true);

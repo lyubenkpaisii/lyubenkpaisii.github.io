@@ -58,54 +58,18 @@
     </style>
   </head>
 <body>
-
-  <div class="container-fluid">
-    <div class='content'>
-      <div class='inner-content'>
-
-        <div class="clearfix">
-          <h2>Terminal Demo</h2>
-            <p>
-Imagine that you have installed FFmpeg on your computer.  Also imagine that you have files called <a href="#">input.webm</a> and <a href="#">perfectgirl.mp3</a> in the current directory.  Feel free to run whatever commands you want, or <strong>try the sample commands below:</strong>
-            </p>
-
-            <div class="sample-commands">
-              <button class="plain-button sample" data-command="-help">Help</button>
-
-              <button class="plain-button sample" data-command="-codecs">List Codecs</button>
-			  
-              <button class="plain-button sample" data-command="-i input.webm -i perfectgirl.mp3 -map 0:v -map 1:a -c:v copy -shortest -strict -2 output.webm">Add audio and download</button>
-              
-            </div>
-            <div id="terminal">
-              <div class="terminal-top-bar">
-                videoconverter.js
-              </div>
-              <div class="terminal-header">
-                <input id="input" value="-help" />
-                <button id="run" class="plain-button">Run Command</button>
-              </div>
-              <pre id="output">Loading JavaScript files (it may take a minute)</pre>
-            </div>
-            <div id="files">
-
-            </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
   <div class="video-block">
         <h2>Rendering canvas animation...</h2>
         <canvas id="canvas" width="500" height="500"></canvas>
     </div>
     <div class="video-block">
         <h2>Rendered WebM video</h2>
-        <video controls loop muted autoplay width="500" height="500" id='video-fortnite'></video>
+        <video controls loop muted autoplay width="500" height="500" id='video-fortnite' type="video/webm"></video>
     </div>
 	<button onclick="document.getElementById('file-input').click();">Open</button>
 	<input id="file-input" type="file" name="file" onchange="showKonataPictures(this)" style="display: none;" multiple/>
-	<button onclick="downloadWebm()">Make Video</button>
+	<button onclick="processWebm()">Make Video</button>
+
 	<button onclick="resetApp()">Clear</button><br/>
 	<div class="slidecontainer">
 		<input type="range" min="1" max="60" value="30" class="slider" id="slider" onchange="changeFramerate()">
