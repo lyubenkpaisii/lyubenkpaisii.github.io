@@ -191,6 +191,7 @@ function downloadWebm() {
 		.then(function(webMBlob) {
 			video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
+			
 			var oReq = new XMLHttpRequest();
 			oReq.open("GET", video.src, true);
 			oReq.responseType = "arraybuffer";
@@ -206,6 +207,8 @@ function downloadWebm() {
 					console.warn(oReq);
 				}
 			};
+			oReq.send(null);
+			
 			oReq = new XMLHttpRequest();
 			oReq.open("GET", "Theperfectgirl.mp3", true);
 			oReq.responseType = "arraybuffer";
@@ -218,15 +221,10 @@ function downloadWebm() {
 			};
 
 			oReq.send(null);
+			
 	});
 }
-
-
-document.addEventListener("DOMContentLoaded", function() {
-
-	var input = document.getElementById('file-input');
-	input.onchange = showKonataPictures;
-
+function initTerminal() {
 	initWorker();
   
 	var inputElement = document.querySelector("#input");
@@ -249,6 +247,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		e.preventDefault();
 		});
 	});
-	
+}
 
+
+document.addEventListener("DOMContentLoaded", function() {
+	var input = document.getElementById('file-input');
+	input.onchange = showKonataPictures;
+	initTerminal();
 });
