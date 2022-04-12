@@ -3,10 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>videoconverter.js - Convert Videos In Your Web Browser</title>
-    <meta name="description" content="Video Converter is a port of the FFmpeg project that allows audio/video conversion and processing in JavaScript.">
-    <meta name="author" content="Brian Grinstead, Aaron Marasco, and contributors">
-    <link rel="shortcut icon" href="../site/favicon.ico">
-    <link href="../site/site.css" rel="stylesheet">
 	<script type="text/javascript" src="webm-writer.js"></script>
     <style type="text/css">
       #terminal {
@@ -78,10 +74,7 @@ Imagine that you have installed FFmpeg on your computer.  Also imagine that you 
 
               <button class="plain-button sample" data-command="-codecs">List Codecs</button>
 			  
-              <button class="plain-button sample" data-command="-i input.webm -i perfectgirl.mp3 -vf showinfo -strict -2 output.mp4">Video to .mp4</button>
-
-              <button class="plain-button sample" data-command="-t 5 -i input.webm -vf showinfo -strict -2 output.gif">Video to .gif</button>
-
+              <button class="plain-button sample" data-command="-i input.webm -i perfectgirl.mp3 -map 0:v -map 1:a -c:v copy -shortest -strict -2 output.webm">Add audio and download</button>
               
             </div>
             <div id="terminal">
@@ -91,7 +84,6 @@ Imagine that you have installed FFmpeg on your computer.  Also imagine that you 
               <div class="terminal-header">
                 <input id="input" value="-help" />
                 <button id="run" class="plain-button">Run Command</button>
-                <img id="image-loader" src="../site/load.gif" />
               </div>
               <pre id="output">Loading JavaScript files (it may take a minute)</pre>
             </div>
@@ -109,7 +101,7 @@ Imagine that you have installed FFmpeg on your computer.  Also imagine that you 
     </div>
     <div class="video-block">
         <h2>Rendered WebM video</h2>
-        <video controls loop muted autoplay width="500" height="500" id='video'></video>
+        <video controls loop muted autoplay width="500" height="500" id='video-fortnite'></video>
     </div>
 	<button onclick="document.getElementById('file-input').click();">Open</button>
 	<input id="file-input" type="file" name="file" onchange="showKonataPictures(this)" style="display: none;" multiple/>

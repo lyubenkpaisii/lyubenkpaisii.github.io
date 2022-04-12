@@ -15,13 +15,11 @@ function isReady() {
 }
 
 function startRunning() {
-  document.querySelector("#image-loader").style.visibility = "visible";
   outputElement.className = "";
   filesElement.innerHTML = "";
   running = true;
 }
 function stopRunning() {
-  document.querySelector("#image-loader").style.visibility = "hidden";
   running = false;
 }
 
@@ -175,7 +173,6 @@ function showKonataPictures(path) {
 		}
 	}
 }
-var debugWebmBlob;
 function resetApp() {
 	document.getElementById('canvas').getContext("2d").clearRect(0,0,500,500);
 	document.getElementById('image-loaded').innerText = '';
@@ -187,10 +184,9 @@ function resetApp() {
 	document.getElementById('slider').disabled = false;
 }
 function downloadWebm() {
-	let video = document.getElementsByTagName("video")[0];
+	let video = document.getElementById('video-fortnite');
 	videoWriter.complete()
 		.then(function(webMBlob) {
-			debugWebmBlob = webMBlob;
 			video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
 			console.log(webMBlob);
@@ -207,7 +203,7 @@ function downloadWebm() {
 				}
 				else {
 					console.log("Array buffer empty on fortnite video request");
-					console.warn(oReq);
+					console.log(oReq);
 					sampleVideoData = new Uint8Array(webMBlob.arrayBuffer());
 				}
 			};
