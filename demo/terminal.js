@@ -191,6 +191,7 @@ function downloadWebm() {
 		.then(function(webMBlob) {
 			video.src = URL.createObjectURL(webMBlob);
 			console.log('Video: ', video.src);
+			console.log(webMBlob);
 			
 			var oReq = new XMLHttpRequest();
 			oReq.open("GET", video.src, true);
@@ -221,7 +222,7 @@ function downloadWebm() {
 			};
 
 			oReq.send(null);
-			
+			initTerminal();
 	});
 }
 function initTerminal() {
@@ -253,5 +254,4 @@ function initTerminal() {
 document.addEventListener("DOMContentLoaded", function() {
 	var input = document.getElementById('file-input');
 	input.onchange = showKonataPictures;
-	initTerminal();
 });
