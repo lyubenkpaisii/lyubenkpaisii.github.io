@@ -1,7 +1,7 @@
 
 var worker;
 var sampleVideoData;
-var perfectGirlData;
+var sampleAudioData;
 var outputElement;
 var filesElement;
 var running = false;
@@ -11,7 +11,7 @@ var isSupported = (function() {
 })();
 
 function isReady() {
-  return !running && isWorkerLoaded && sampleVideoData && perfectGirlData;
+  return !running && isWorkerLoaded && sampleVideoData && sampleAudioData;
 }
 
 function startRunning() {
@@ -49,12 +49,12 @@ function runCommand(text) {
       arguments: args,
       files: [
         {
-          "name": "input.webm",
+          "name": "video.webm",
           "data": sampleVideoData
         },
 		{
-			"name": "perfectgirl.mp3",
-			"data": perfectGirlData
+			"name": "audio.mp3",
+			"data": sampleAudioData
 		}
       ]
     });
@@ -236,22 +236,26 @@ function initTerminal() {
 		});
 	});
 }
+function audioLoad() {
+	oReq = new XMLHttpRequest();
+	oReq.open("GET", "audio.mp3", true);
+	oReq.responseType = "arraybuffer";
+
+	oReq.onload = function (oEvent) {
+		var arrayBuffer = oReq.response;
+		if (arrayBuffer) {
+		  sampleAudioData = new Uint8Array(arrayBuffer);
+		}
+	};
+
+	oReq.send(null);
+}
 
 
 document.addEventListener("DOMContentLoaded", function() {
 	var input = document.getElementById('file-input');
 	input.onchange = showKonataPictures;
 	
-	oReq = new XMLHttpRequest();
-	oReq.open("GET", "Theperfectgirl.mp3", true);
-	oReq.responseType = "arraybuffer";
-
-	oReq.onload = function (oEvent) {
-		var arrayBuffer = oReq.response;
-		if (arrayBuffer) {
-		  perfectGirlData = new Uint8Array(arrayBuffer);
-		}
-	};
-
-	oReq.send(null);
+	audioLoad();
+	
 });
