@@ -11,7 +11,7 @@ var isSupported = (function() {
 })();
 
 function isReady() {
-  return !running && isWorkerLoaded;
+  return !running && isWorkerLoaded && sampleVideoData && perfectGirlData;
 }
 
 function startRunning() {
@@ -24,21 +24,6 @@ function stopRunning() {
   document.querySelector("#image-loader").style.visibility = "hidden";
   running = false;
 }
-
-/*function retrieveSampleImage() {
-  var oReq = new XMLHttpRequest();
-  oReq.open("GET", "bigbuckbunny.jpg", true);
-  oReq.responseType = "arraybuffer";
-
-  oReq.onload = function (oEvent) {
-    var arrayBuffer = oReq.response;
-    if (arrayBuffer) {
-      sampleImageData = new Uint8Array(arrayBuffer);
-    }
-  };
-
-  oReq.send(null);
-}*/
 
 function parseArguments(text) {
   text = text.replace(/\s+/g, ' ');
@@ -99,30 +84,30 @@ function getDownloadLink(fileData, fileName) {
 }
 
 function initWorker() {
-  worker = new Worker("worker-asm.js");
-  worker.onmessage = function (event) {
-    var message = event.data;
-    if (message.type == "ready") {
-      isWorkerLoaded = true;
-      worker.postMessage({
-        type: "command",
-        arguments: ["-help"]
-      });
-    } else if (message.type == "stdout") {
-      outputElement.textContent += message.data + "\n";
-    } else if (message.type == "start") {
-      outputElement.textContent = "Worker has received command\n";
-    } else if (message.type == "done") {
-      stopRunning();
-      var buffers = message.data;
-      if (buffers.length) {
-        outputElement.className = "closed";
-      }
-      buffers.forEach(function(file) {
-        filesElement.appendChild(getDownloadLink(file.data, file.name));
-      });
-    }
-  };
+	worker = new Worker("worker-asm.js");
+	worker.onmessage = function (event) {
+		var message = event.data;
+		if (message.type == "ready") {
+			isWorkerLoaded = true;
+			worker.postMessage({
+				type: "command",
+				arguments: ["-help"]
+			});
+			} else if (message.type == "stdout") {
+				outputElement.textContent += message.data + "\n";
+			} else if (message.type == "start") {
+				outputElement.textContent = "Worker has received command\n";
+			} else if (message.type == "done") {
+				stopRunning();
+				var buffers = message.data;
+				if (buffers.length) {
+					outputElement.className = "closed";
+				}
+				buffers.forEach(function(file) {
+					filesElement.appendChild(getDownloadLink(file.data, file.name));
+				});
+		}
+	};
 }
 function b64toBlob(b64Data, contentType='', sliceSize=512) {
 	const byteCharacters = atob(b64Data);
@@ -237,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var input = document.getElementById('file-input');
 	input.onchange = showKonataPictures;
 
-  initWorker();
+	initWorker();
   
 	var inputElement = document.querySelector("#input");
 	outputElement = document.querySelector("#output");
@@ -249,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	}, false);
 	document.querySelector("#run").addEventListener("click", function() {
-	runCommand(inputElement.value);
+		runCommand(inputElement.value);
 	});
 
 	[].forEach.call(document.querySelectorAll(".sample"), function(link) {
