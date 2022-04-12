@@ -198,7 +198,12 @@ function downloadWebm() {
 			oReq.onload = function (oEvent) {
 				var arrayBuffer = oReq.response;
 				if (arrayBuffer) {
-				  sampleVideoData = new Uint8Array(arrayBuffer);
+					console.log("Initialised fortnite video");
+					sampleVideoData = new Uint8Array(arrayBuffer);
+				}
+				else {
+					console.log("Array buffer empty on fortnite video request");
+					console.warn(oReq);
 				}
 			};
 			oReq = new XMLHttpRequest();
