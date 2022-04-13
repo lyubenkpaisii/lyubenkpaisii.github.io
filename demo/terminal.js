@@ -121,6 +121,31 @@ function showKonataPictures(path) {
 		}
 	}
 }
+function setAudioTrack(path) {
+	console.log(path.target.files);
+	var reader = new FileReader();
+	let file = path.target.files[0];
+	reader.readAsDataURL(file);
+	reader.onload = readerEvent => {
+		var content = readerEvent.target.result; // this is the content!
+		console.log(content);
+		content = content.replace(/.*base64,/,'');
+		const blob = b64toBlob(content, 'audio/mpeg');
+		const blobUrl = URL.createObjectURL(blob);
+		oReq = new XMLHttpRequest();
+		oReq.open("GET", blobUrl, true);
+		oReq.responseType = "arraybuffer";
+
+		oReq.onload = function (oEvent) {
+			var arrayBuffer = oReq.response;
+			if (arrayBuffer) {
+			  sampleAudioData = new Uint8Array(arrayBuffer);
+			}
+		};
+
+		oReq.send(null);
+	}
+}
 function resetApp() {
 	document.getElementById('canvas').getContext("2d").clearRect(0,0,500,500);
 	document.getElementById('image-loaded').innerText = '';
@@ -205,26 +230,10 @@ function initTerminal() {
 	initWorker();
 }
 
-function audioLoad() {
-	oReq = new XMLHttpRequest();
-	oReq.open("GET", "audio.mp3", true);
-	oReq.responseType = "arraybuffer";
-
-	oReq.onload = function (oEvent) {
-		var arrayBuffer = oReq.response;
-		if (arrayBuffer) {
-		  sampleAudioData = new Uint8Array(arrayBuffer);
-		}
-	};
-
-	oReq.send(null);
-}
-
-
 document.addEventListener("DOMContentLoaded", function() {
 	var input = document.getElementById('file-input');
 	input.onchange = showKonataPictures;
 	
-	audioLoad();
-	
+	var audio_input = document.getElementById('audio-input');
+	audio_input.onchange = setAudioTrack;
 });

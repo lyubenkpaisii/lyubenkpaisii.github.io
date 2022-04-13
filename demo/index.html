@@ -66,8 +66,12 @@
         <h2>Rendered WebM video</h2>
         <video controls loop muted autoplay width="500" height="500" id='video-fortnite' type="video/webm"></video>
     </div>
-	<button onclick="document.getElementById('file-input').click();">Open</button>
+	<button onclick="document.getElementById('file-input').click();">Select pictures for frames</button>
 	<input id="file-input" type="file" name="file" onchange="showKonataPictures(this)" style="display: none;" multiple/>
+	
+	<button onclick="document.getElementById('audio-input').click();">Select Audio</button>
+	<input id="audio-input" type="file" name="file" onchange="setAudioTrack(this)" style="display:none;"  accept="audio/mpeg"/>
+	
 	<button onclick="processWebm()">Make Video</button>
 
 	<button onclick="resetApp()">Clear</button><br/>
