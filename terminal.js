@@ -1,4 +1,3 @@
-
 var worker;
 var sampleVideoData;
 var sampleAudioData;

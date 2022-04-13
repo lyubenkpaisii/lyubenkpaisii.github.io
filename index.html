@@ -1,38 +1,79 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Video writer test</title>
-    <script type="text/javascript" src="webm-writer.js"></script>
-    <script type="text/javascript" src="test.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>videoconverter.js - Convert Videos In Your Web Browser</title>
+	<script type="text/javascript" src="webm-writer.js"></script>
     <style type="text/css">
-        .video-block {
-            float:left;
-            margin-right:1em;
-        }
+      #terminal {
+        background: #fff;
+        color: #000;
+        font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+        font-weight: lighter;
+        border: solid 1px;
+        padding: 10px;
+        margin-top: 35px;
+      }
+      .terminal-top-bar {
+        background: rgb(233, 233, 233);
+        height: 14px;
+        font-size: 12px;
+        line-height: 14px;
+        margin-top: -30px;
+        margin-left: -11px;
+        margin-right: -11px;
+        padding: 3px;
+        text-align: center;
+        color: rgb(92, 92, 92);
+        border: solid 1px;
+        border-radius: 2px 2px 0 0;
+      }
+      .terminal-header {
+        padding-top: 15px;
+      }
+      #input {
+        width: 80%;
+        padding: 4px;
+      }
+      #run {
+        width: 15%
+      }
+      #output {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      #output.closed {
+        max-height: 200px;
+        overflow-y: scroll;
+      }
+      #files {
+        text-align: center;
+      }
+      #files img {
+        max-width: 80%;
+      }
+      .sample-commands {
+        text-align: center;
+      }
     </style>
-</head>
-
+  </head>
 <body>
-    <!--
-
-    This test may either be installed in Google Chrome using Chrome's extension menu's "add unpacked extension" option,
-    whereupon it can use Chrome's FileWriter API to stream the video to disk directly, or this file can instead
-    be viewed as a normal webpage, in which case it will buffer the video in memory and use the FileSaver tool to save
-    it to disk after buffering is complete.
-
-     -->
-    <div class="video-block">
+  <div class="video-block">
         <h2>Rendering canvas animation...</h2>
         <canvas id="canvas" width="500" height="500"></canvas>
     </div>
     <div class="video-block">
         <h2>Rendered WebM video</h2>
-        <video controls loop muted autoplay width="500" height="500" id='video'></video>
+        <video controls loop muted autoplay width="500" height="500" id='video-fortnite' type="video/webm"></video>
     </div>
-	<button onclick="document.getElementById('file-input').click();">Open</button>
+	<button onclick="document.getElementById('file-input').click();">Select pictures for frames</button>
 	<input id="file-input" type="file" name="file" onchange="showKonataPictures(this)" style="display: none;" multiple/>
-	<button onclick="downloadWebm()">Make Video</button>
+	
+	<button onclick="document.getElementById('audio-input').click();">Select Audio</button>
+	<input id="audio-input" type="file" name="file" onchange="setAudioTrack(this)" style="display:none;"  accept="audio/mpeg"/>
+	
+	<button onclick="processWebm()">Make Video</button>
+
 	<button onclick="resetApp()">Clear</button><br/>
 	<div class="slidecontainer">
 		<input type="range" min="1" max="60" value="30" class="slider" id="slider" onchange="changeFramerate()">
@@ -40,5 +81,7 @@
 	</div>
 	<br>
 	<p id="image-loaded"></p>
+
+  <script type='text/javascript' src='terminal.js'></script>
 </body>
 </html>
