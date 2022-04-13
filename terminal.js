@@ -147,7 +147,7 @@ function setAudioTrack(path) {
 }
 function resetApp() {
 	let canvas = document.getElementById('canvas');
-	canvas.getContext("2d").context.clearRect(0, 0, canvas.width, canvas.height);
+	canvas.getContext("2d").clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 	document.getElementById('image-loaded').innerText = '';
 	videoWriter = new WebMWriter({frameRate: framerate,fileWriter: null});
 	let video = document.getElementById('video-fortnite');
