@@ -147,10 +147,11 @@ function setAudioTrack(path) {
 	}
 }
 function resetApp() {
-	document.getElementById('canvas').getContext("2d").clearRect(0,0,500,500);
+	let canvas = document.getElementById('canvas');
+	canvas.getContext("2d").context.clearRect(0, 0, canvas.width, canvas.height);
 	document.getElementById('image-loaded').innerText = '';
 	videoWriter = new WebMWriter({frameRate: framerate,fileWriter: null});
-	let video = document.getElementById('video');
+	let video = document.getElementById('video-fortnite');
 	video.pause();
 	video.removeAttribute('src');
 	video.load();
